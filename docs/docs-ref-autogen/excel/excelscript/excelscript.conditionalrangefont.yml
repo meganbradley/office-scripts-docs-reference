@@ -4,7 +4,37 @@ uid: 'ExcelScript!ExcelScript.ConditionalRangeFont:interface'
 package: ExcelScript!
 fullName: ExcelScript.ConditionalRangeFont
 summary: 'This object represents the font attributes (font style, color, etc.) for an object.'
-remarks: ''
+remarks: |-
+
+
+  #### Examples
+
+  ```TypeScript
+  /**
+   * This script creates text conditional formatting on the used range of the current worksheet.
+   * It underlines the text in cells containing "TK".
+   */
+  function main(workbook: ExcelScript.Workbook) {
+    // Get the selected range.
+    const sheet = workbook.getActiveWorksheet();
+    const range = sheet.getUsedRange();
+
+    // Create new conditional formatting on the range.
+    const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+    const textFormat = format.getTextComparison();
+
+    // Set a formatting rule for text that contains "TK"
+    const textRule: ExcelScript.ConditionalTextComparisonRule = {
+      operator: ExcelScript.ConditionalTextOperator.contains,
+      text: "TK"
+    };
+    textFormat.setRule(textRule);
+
+    // Set the font format to underline the text.
+    const font: ExcelScript.ConditionalRangeFont = textFormat.getFormat().getFont();
+    font.setUnderline(ExcelScript.ConditionalRangeFontUnderlineStyle.single);
+  }
+  ```
 isPreview: false
 isDeprecated: false
 type: interface

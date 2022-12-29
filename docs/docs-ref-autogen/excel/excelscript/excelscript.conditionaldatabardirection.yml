@@ -4,7 +4,28 @@ uid: 'ExcelScript!ExcelScript.ConditionalDataBarDirection:enum'
 package: ExcelScript!
 fullName: ExcelScript.ConditionalDataBarDirection
 summary: Represents the data bar direction within a cell.
-remarks: ''
+remarks: |-
+
+
+  #### Examples
+
+  ```TypeScript
+  /**
+   * This script creates data bar conditional formatting on the selected range.
+   * It changes the data bar direction from the default to left-to-right. 
+   */
+  function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const selected = workbook.getSelectedRange();
+
+      // Create new conditional formatting on the range.
+      const format = selected.addConditionalFormat(ExcelScript.ConditionalFormatType.dataBar);
+      const dataBarFormat = format.getDataBar();
+
+      // Set the data bar direction to treat the right side as the minimum side.
+      dataBarFormat.setBarDirection(ExcelScript.ConditionalDataBarDirection.leftToRight)
+  }
+  ```
 isPreview: false
 isDeprecated: false
 fields:

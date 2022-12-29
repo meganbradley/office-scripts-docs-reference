@@ -4,7 +4,28 @@ uid: 'ExcelScript!ExcelScript.ConditionalDataBarAxisFormat:enum'
 package: ExcelScript!
 fullName: ExcelScript.ConditionalDataBarAxisFormat
 summary: Represents the format options for a data bar axis.
-remarks: ''
+remarks: |-
+
+
+  #### Examples
+
+  ```TypeScript
+  /**
+   * This script creates data bar conditional formatting on the selected range.
+   * The data bar axis uses the midpoint as "0" when negative values are in the range.
+   */
+  function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const selected = workbook.getSelectedRange();
+
+      // Create new conditional formatting on the range.
+      const format = selected.addConditionalFormat(ExcelScript.ConditionalFormatType.dataBar);
+      const dataBarFormat = format.getDataBar();
+
+      // Set the data bar direction to treat the right side as the minimum side.
+      dataBarFormat.setAxisFormat(ExcelScript.ConditionalDataBarAxisFormat.cellMidPoint);
+  }
+  ```
 isPreview: false
 isDeprecated: false
 fields:

@@ -41,7 +41,44 @@ methods:
           type: '<xref uid="ExcelScript!ExcelScript.ConditionalRangeBorderIndex:enum" />'
       return:
         type: '<xref uid="ExcelScript!ExcelScript.ConditionalRangeBorder:interface" />'
-        description: ''
+        description: |-
+
+
+          #### Examples
+
+          ```TypeScript
+          /**
+          * This script creates text conditional formatting on the used range of the current worksheet.
+          * It puts a red border around cells containing "TK".
+          */
+          function main(workbook: ExcelScript.Workbook) {
+            // Get the selected range.
+            const sheet = workbook.getActiveWorksheet();
+            const range = sheet.getUsedRange();
+
+            // Create new conditional formatting on the range.
+            const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+            const textFormat = format.getTextComparison();
+
+            // Set a formatting rule for text that contains "TK"
+            const textRule: ExcelScript.ConditionalTextComparisonRule = {
+              operator: ExcelScript.ConditionalTextOperator.contains,
+              text: "TK"
+            };
+            textFormat.setRule(textRule);
+
+            // Set the format to add red borders to the cell.
+            const formatting = textFormat.getFormat();
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setColor("red");
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setColor("red");
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeTop).setColor("red");
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeRight).setColor("red");
+          }
+          ```
   - name: getConditionalRangeBorderBottom()
     uid: 'ExcelScript!ExcelScript.ConditionalRangeFormat#getConditionalRangeBorderBottom:member(1)'
     package: ExcelScript!
@@ -119,7 +156,37 @@ methods:
       content: 'getFont(): ConditionalRangeFont;'
       return:
         type: '<xref uid="ExcelScript!ExcelScript.ConditionalRangeFont:interface" />'
-        description: ''
+        description: |-
+
+
+          #### Examples
+
+          ```TypeScript
+          /**
+           * This script creates text conditional formatting on the used range of the current worksheet.
+           * It underlines the text in cells containing "TK".
+           */
+          function main(workbook: ExcelScript.Workbook) {
+            // Get the selected range.
+            const sheet = workbook.getActiveWorksheet();
+            const range = sheet.getUsedRange();
+
+            // Create new conditional formatting on the range.
+            const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+            const textFormat = format.getTextComparison();
+
+            // Set a formatting rule for text that contains "TK"
+            const textRule: ExcelScript.ConditionalTextComparisonRule = {
+              operator: ExcelScript.ConditionalTextOperator.contains,
+              text: "TK"
+            };
+            textFormat.setRule(textRule);
+
+            // Set the font format to underline the text.
+            const font: ExcelScript.ConditionalRangeFont = textFormat.getFormat().getFont();
+            font.setUnderline(ExcelScript.ConditionalRangeFontUnderlineStyle.single);
+          }
+          ```
   - name: getNumberFormat()
     uid: 'ExcelScript!ExcelScript.ConditionalRangeFormat#getNumberFormat:member(1)'
     package: ExcelScript!

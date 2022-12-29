@@ -4,7 +4,28 @@ uid: 'ExcelScript!ExcelScript.IconSet:enum'
 package: ExcelScript!
 fullName: ExcelScript.IconSet
 summary: ''
-remarks: ''
+remarks: |-
+
+
+  #### Examples
+
+  ```TypeScript
+  /**
+   * This script creates icon conditional formatting on the selected range.
+   * It sets the icon style to be the "traffic lights" style.
+   */
+  function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const selected = workbook.getSelectedRange();
+
+      // Create new conditional formatting on the range.
+      const format = selected.addConditionalFormat(ExcelScript.ConditionalFormatType.iconSet);
+
+      // Set the icons to show.
+      const iconSetFormat = format.getIconSet();
+      iconSetFormat.setStyle(ExcelScript.IconSet.threeTrafficLights1);
+  }
+  ```
 isPreview: false
 isDeprecated: false
 fields:

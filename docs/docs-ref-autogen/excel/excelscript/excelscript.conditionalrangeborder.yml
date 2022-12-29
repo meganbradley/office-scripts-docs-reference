@@ -91,4 +91,53 @@ methods:
           type: '<xref uid="ExcelScript!ExcelScript.ConditionalRangeBorderLineStyle:enum" />'
       return:
         type: void
-        description: ''
+        description: |-
+
+
+          #### Examples
+
+          ```TypeScript
+          /**
+           * This script creates text conditional formatting on the used range of the current worksheet.
+           * It puts a dashed red border around cells containing "TK".
+           */
+          function main(workbook: ExcelScript.Workbook) {
+            // Get the selected range.
+            const sheet = workbook.getActiveWorksheet();
+            const range = sheet.getUsedRange();
+
+            // Create new conditional formatting on the range.
+            const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+            const textFormat = format.getTextComparison();
+
+            // Set a formatting rule for text that contains "TK"
+            const textRule: ExcelScript.ConditionalTextComparisonRule = {
+              operator: ExcelScript.ConditionalTextOperator.contains,
+              text: "TK"
+            };
+            textFormat.setRule(textRule);
+
+            // Set the format to add dashed red borders to the cell.
+            const formatting = textFormat.getFormat();
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setColor("red");
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setStyle(
+                  ExcelScript.ConditionalRangeBorderLineStyle.dash);
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setColor("red");
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setStyle(
+                ExcelScript.ConditionalRangeBorderLineStyle.dash);
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeTop).setColor("red");
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeTop).setStyle(
+                ExcelScript.ConditionalRangeBorderLineStyle.dash);
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeRight).setColor("red");
+            formatting.getConditionalRangeBorder(
+              ExcelScript.ConditionalRangeBorderIndex.edgeRight).setStyle(
+                ExcelScript.ConditionalRangeBorderLineStyle.dash);
+          }
+          ```

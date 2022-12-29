@@ -814,10 +814,44 @@
       format.getFill().setColor("yellow");
       format.getFont().setItalic(true);
     }
+'ExcelScript.ConditionalDataBarAxisFormat:enum':
+  - |-
+    /**
+     * This script creates data bar conditional formatting on the selected range.
+     * The data bar axis uses the midpoint as "0" when negative values are in the range.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get the selected range.
+        const selected = workbook.getSelectedRange();
+
+        // Create new conditional formatting on the range.
+        const format = selected.addConditionalFormat(ExcelScript.ConditionalFormatType.dataBar);
+        const dataBarFormat = format.getDataBar();
+
+        // Set the data bar direction to treat the right side as the minimum side.
+        dataBarFormat.setAxisFormat(ExcelScript.ConditionalDataBarAxisFormat.cellMidPoint);
+    }
+'ExcelScript.ConditionalDataBarDirection:enum':
+  - |-
+    /**
+     * This script creates data bar conditional formatting on the selected range.
+     * It changes the data bar direction from the default to left-to-right. 
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get the selected range.
+        const selected = workbook.getSelectedRange();
+
+        // Create new conditional formatting on the range.
+        const format = selected.addConditionalFormat(ExcelScript.ConditionalFormatType.dataBar);
+        const dataBarFormat = format.getDataBar();
+
+        // Set the data bar direction to treat the right side as the minimum side.
+        dataBarFormat.setBarDirection(ExcelScript.ConditionalDataBarDirection.leftToRight)
+    }
 'ExcelScript.ConditionalDataBarRule:interface':
   - |-
     /**
-     * This script creates data bar conditional formatting on the select ranged.
+     * This script creates data bar conditional formatting on the selected range.
      * The scale of the data bar goes from 0 to 1000.
      */
     function main(workbook: ExcelScript.Workbook) {
@@ -918,7 +952,7 @@
 'ExcelScript.ConditionalFormat#getDataBar:member(1)':
   - |-
     /**
-     * This script creates data bar conditional formatting on the select ranged.
+     * This script creates data bar conditional formatting on the selected range.
      * The scale of the data bar goes from 0 to 1000.
      */
     function main(workbook: ExcelScript.Workbook) {
@@ -942,6 +976,23 @@
         formula: "1000"
       };
       dataBarFormat.setUpperBoundRule(upperBound);
+    }
+'ExcelScript.ConditionalFormat#getIconSet:member(1)':
+  - |-
+    /**
+     * This script creates icon conditional formatting on the selected range.
+     * It sets the icon style to be the "traffic lights" style.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get the selected range.
+        const selected = workbook.getSelectedRange();
+
+        // Create new conditional formatting on the range.
+        const format = selected.addConditionalFormat(ExcelScript.ConditionalFormatType.iconSet);
+
+        // Set the icons to show.
+        const iconSetFormat = format.getIconSet();
+        iconSetFormat.setStyle(ExcelScript.IconSet.threeTrafficLights1);
     }
 'ExcelScript.ConditionalFormat#getPreset:member(1)':
   - |-
@@ -1051,7 +1102,7 @@
 'ExcelScript.ConditionalFormatRuleType:enum':
   - |-
     /**
-     * This script creates data bar conditional formatting on the select ranged.
+     * This script creates data bar conditional formatting on the selected range.
      * The scale of the data bar goes from 0 to 1000.
      */
     function main(workbook: ExcelScript.Workbook) {
@@ -1129,6 +1180,240 @@
         criterion: ExcelScript.ConditionalFormatPresetCriterion.duplicateValues
       };
       presetFormat.setRule(duplicateRule);
+    }
+'ExcelScript.ConditionalRangeBorderIndex:enum':
+  - |-
+    /**
+    * This script creates text conditional formatting on the used range of the current worksheet.
+    * It puts a red border around cells containing "TK".
+    */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getUsedRange();
+
+      // Create new conditional formatting on the range.
+      const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+      const textFormat = format.getTextComparison();
+
+      // Set a formatting rule for text that contains "TK"
+      const textRule: ExcelScript.ConditionalTextComparisonRule = {
+        operator: ExcelScript.ConditionalTextOperator.contains,
+        text: "TK"
+      };
+      textFormat.setRule(textRule);
+
+      // Set the format to add red borders to the cell.
+      const formatting = textFormat.getFormat();
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeTop).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeRight).setColor("red");
+    }
+'ExcelScript.ConditionalRangeBorderLineStyle:enum':
+  - |-
+    /**
+     * This script creates text conditional formatting on the used range of the current worksheet.
+     * It puts a dashed red border around cells containing "TK".
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getUsedRange();
+
+      // Create new conditional formatting on the range.
+      const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+      const textFormat = format.getTextComparison();
+
+      // Set a formatting rule for text that contains "TK"
+      const textRule: ExcelScript.ConditionalTextComparisonRule = {
+        operator: ExcelScript.ConditionalTextOperator.contains,
+        text: "TK"
+      };
+      textFormat.setRule(textRule);
+
+      // Set the format to add dashed red borders to the cell.
+      const formatting = textFormat.getFormat();
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setStyle(
+            ExcelScript.ConditionalRangeBorderLineStyle.dash);
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setStyle(
+          ExcelScript.ConditionalRangeBorderLineStyle.dash);
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeTop).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeTop).setStyle(
+          ExcelScript.ConditionalRangeBorderLineStyle.dash);
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeRight).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeRight).setStyle(
+          ExcelScript.ConditionalRangeBorderLineStyle.dash);
+    }
+'ExcelScript.ConditionalRangeBorder#setStyle:member(1)':
+  - |-
+    /**
+     * This script creates text conditional formatting on the used range of the current worksheet.
+     * It puts a dashed red border around cells containing "TK".
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getUsedRange();
+
+      // Create new conditional formatting on the range.
+      const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+      const textFormat = format.getTextComparison();
+
+      // Set a formatting rule for text that contains "TK"
+      const textRule: ExcelScript.ConditionalTextComparisonRule = {
+        operator: ExcelScript.ConditionalTextOperator.contains,
+        text: "TK"
+      };
+      textFormat.setRule(textRule);
+
+      // Set the format to add dashed red borders to the cell.
+      const formatting = textFormat.getFormat();
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setStyle(
+            ExcelScript.ConditionalRangeBorderLineStyle.dash);
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setStyle(
+          ExcelScript.ConditionalRangeBorderLineStyle.dash);
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeTop).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeTop).setStyle(
+          ExcelScript.ConditionalRangeBorderLineStyle.dash);
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeRight).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeRight).setStyle(
+          ExcelScript.ConditionalRangeBorderLineStyle.dash);
+    }
+'ExcelScript.ConditionalRangeFont:interface':
+  - |-
+    /**
+     * This script creates text conditional formatting on the used range of the current worksheet.
+     * It underlines the text in cells containing "TK".
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getUsedRange();
+
+      // Create new conditional formatting on the range.
+      const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+      const textFormat = format.getTextComparison();
+
+      // Set a formatting rule for text that contains "TK"
+      const textRule: ExcelScript.ConditionalTextComparisonRule = {
+        operator: ExcelScript.ConditionalTextOperator.contains,
+        text: "TK"
+      };
+      textFormat.setRule(textRule);
+
+      // Set the font format to underline the text.
+      const font: ExcelScript.ConditionalRangeFont = textFormat.getFormat().getFont();
+      font.setUnderline(ExcelScript.ConditionalRangeFontUnderlineStyle.single);
+    }
+'ExcelScript.ConditionalRangeFontUnderlineStyle:enum':
+  - |-
+    /**
+     * This script creates text conditional formatting on the used range of the current worksheet.
+     * It underlines the text in cells containing "TK".
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getUsedRange();
+
+      // Create new conditional formatting on the range.
+      const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+      const textFormat = format.getTextComparison();
+
+      // Set a formatting rule for text that contains "TK"
+      const textRule: ExcelScript.ConditionalTextComparisonRule = {
+        operator: ExcelScript.ConditionalTextOperator.contains,
+        text: "TK"
+      };
+      textFormat.setRule(textRule);
+
+      // Set the font format to underline the text.
+      const font = textFormat.getFormat().getFont();
+      font.setUnderline(ExcelScript.ConditionalRangeFontUnderlineStyle.single);
+    }
+'ExcelScript.ConditionalRangeFormat#getConditionalRangeBorder:member(1)':
+  - |-
+    /**
+    * This script creates text conditional formatting on the used range of the current worksheet.
+    * It puts a red border around cells containing "TK".
+    */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getUsedRange();
+
+      // Create new conditional formatting on the range.
+      const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+      const textFormat = format.getTextComparison();
+
+      // Set a formatting rule for text that contains "TK"
+      const textRule: ExcelScript.ConditionalTextComparisonRule = {
+        operator: ExcelScript.ConditionalTextOperator.contains,
+        text: "TK"
+      };
+      textFormat.setRule(textRule);
+
+      // Set the format to add red borders to the cell.
+      const formatting = textFormat.getFormat();
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeBottom).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeLeft).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeTop).setColor("red");
+      formatting.getConditionalRangeBorder(
+        ExcelScript.ConditionalRangeBorderIndex.edgeRight).setColor("red");
+    }
+'ExcelScript.ConditionalRangeFormat#getFont:member(1)':
+  - |-
+    /**
+     * This script creates text conditional formatting on the used range of the current worksheet.
+     * It underlines the text in cells containing "TK".
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the selected range.
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getUsedRange();
+
+      // Create new conditional formatting on the range.
+      const format = range.addConditionalFormat(ExcelScript.ConditionalFormatType.containsText);
+      const textFormat = format.getTextComparison();
+
+      // Set a formatting rule for text that contains "TK"
+      const textRule: ExcelScript.ConditionalTextComparisonRule = {
+        operator: ExcelScript.ConditionalTextOperator.contains,
+        text: "TK"
+      };
+      textFormat.setRule(textRule);
+
+      // Set the font format to underline the text.
+      const font: ExcelScript.ConditionalRangeFont = textFormat.getFormat().getFont();
+      font.setUnderline(ExcelScript.ConditionalRangeFontUnderlineStyle.single);
     }
 'ExcelScript.ConditionalTextComparisonRule:interface':
   - |-
@@ -1287,7 +1572,7 @@
 'ExcelScript.DataBarConditionalFormat:interface':
   - |-
     /**
-     * This script creates data bar conditional formatting on the select ranged.
+     * This script creates data bar conditional formatting on the selected range.
      * The scale of the data bar goes from 0 to 1000.
      */
     function main(workbook: ExcelScript.Workbook) {
@@ -1900,6 +2185,23 @@
 
       // Set the horizontal text alignment to `center`.
       headerRange.getFormat().setHorizontalAlignment(ExcelScript.HorizontalAlignment.center);
+    }
+'ExcelScript.IconSet:enum':
+  - |-
+    /**
+     * This script creates icon conditional formatting on the selected range.
+     * It sets the icon style to be the "traffic lights" style.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get the selected range.
+        const selected = workbook.getSelectedRange();
+
+        // Create new conditional formatting on the range.
+        const format = selected.addConditionalFormat(ExcelScript.ConditionalFormatType.iconSet);
+
+        // Set the icons to show.
+        const iconSetFormat = format.getIconSet();
+        iconSetFormat.setStyle(ExcelScript.IconSet.threeTrafficLights1);
     }
 'ExcelScript.Image:interface':
   - |-
