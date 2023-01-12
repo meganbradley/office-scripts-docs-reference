@@ -535,6 +535,10 @@ items:
             uid: 'ExcelScript!ExcelScript.RangeFormat:interface'
           - name: RangeHyperlink
             uid: 'ExcelScript!ExcelScript.RangeHyperlink:interface'
+          - name: RangeOffset
+            uid: 'ExcelScript!ExcelScript.RangeOffset:interface'
+          - name: RangeOffset4
+            uid: 'ExcelScript!ExcelScript.RangeOffset4:interface'
           - name: RangeSort
             uid: 'ExcelScript!ExcelScript.RangeSort:interface'
           - name: RangeValue

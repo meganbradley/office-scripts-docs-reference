@@ -1,0 +1,47 @@
+### YamlMime:TSType
+name: ExcelScript.RangeOffset4
+uid: 'ExcelScript!ExcelScript.RangeOffset4:interface'
+package: ExcelScript!
+fullName: ExcelScript.RangeOffset4
+summary: ''
+remarks: ''
+isPreview: false
+isDeprecated: false
+type: interface
+properties:
+  - name: absolute
+    uid: 'ExcelScript!ExcelScript.RangeOffset4#absolute:member'
+    package: ExcelScript!
+    fullName: absolute
+    summary: '* I don''t know what this means but it corresponds to the toAbsolute thing'
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'absolute?: boolean;'
+      return:
+        type: boolean
+  - name: x
+    uid: 'ExcelScript!ExcelScript.RangeOffset4#x:member'
+    package: ExcelScript!
+    fullName: x
+    summary: '* I don''t know what we use in excel for horizontal offset, is it ''c''?'
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'x?: number;'
+      return:
+        type: number
+  - name: 'y'
+    uid: 'ExcelScript!ExcelScript.RangeOffset4#y:member'
+    package: ExcelScript!
+    fullName: 'y'
+    summary: '* Vertical Offset'
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'y?: number;'
+      return:
+        type: number

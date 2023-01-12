@@ -267,6 +267,8 @@ interfaces:
   - 'ExcelScript!ExcelScript.RangeFont:interface'
   - 'ExcelScript!ExcelScript.RangeFormat:interface'
   - 'ExcelScript!ExcelScript.RangeHyperlink:interface'
+  - 'ExcelScript!ExcelScript.RangeOffset:interface'
+  - 'ExcelScript!ExcelScript.RangeOffset4:interface'
   - 'ExcelScript!ExcelScript.RangeSort:interface'
   - 'ExcelScript!ExcelScript.RangeView:interface'
   - 'ExcelScript!ExcelScript.RemoveDuplicatesResult:interface'
@@ -305,6 +307,70 @@ interfaces:
 typeAliases:
   - 'ExcelScript!ExcelScript.RangeValue:type'
 functions:
+  - name: ExcelScript.getOffsetRangeAreas(offsets)
+    uid: 'ExcelScript!ExcelScript.getOffsetRangeAreas:function(1)'
+    package: ExcelScript!
+    summary: '*'
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'export function getOffsetRangeAreas(offsets: Partial<RangeOffset>[]): void'
+      parameters:
+        - id: offsets
+          description: ''
+          type: 'Partial&lt;<xref uid="ExcelScript!ExcelScript.RangeOffset:interface" />&gt;[]'
+      return:
+        type: void
+        description: ''
+  - name: ExcelScript.getOffsetRangeAreas2(offsets)
+    uid: 'ExcelScript!ExcelScript.getOffsetRangeAreas2:function(1)'
+    package: ExcelScript!
+    summary: ''
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'export function getOffsetRangeAreas2(offsets: Partial<{x: number, y: number, absolute: boolean}>[]): void'
+      parameters:
+        - id: offsets
+          description: ''
+          type: 'Partial&lt;{x: number, y: number, absolute: boolean}&gt;[]'
+      return:
+        type: void
+        description: ''
+  - name: ExcelScript.getOffsetRangeAreas3(offsets)
+    uid: 'ExcelScript!ExcelScript.getOffsetRangeAreas3:function(1)'
+    package: ExcelScript!
+    summary: ''
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'export function getOffsetRangeAreas3(offsets: {x?: number, y?: number, absolute?: boolean}[]): void'
+      parameters:
+        - id: offsets
+          description: ''
+          type: '{x?: number, y?: number, absolute?: boolean}[]'
+      return:
+        type: void
+        description: ''
+  - name: ExcelScript.getOffsetRangeAreas4(offsets)
+    uid: 'ExcelScript!ExcelScript.getOffsetRangeAreas4:function(1)'
+    package: ExcelScript!
+    summary: ''
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'export function getOffsetRangeAreas4(offsets: RangeOffset4[]): void'
+      parameters:
+        - id: offsets
+          description: ''
+          type: '<xref uid="ExcelScript!ExcelScript.RangeOffset4:interface" />[]'
+      return:
+        type: void
+        description: ''
   - name: ExcelScript.run(callback)
     uid: 'ExcelScript!ExcelScript.run:function(1)'
     package: ExcelScript!

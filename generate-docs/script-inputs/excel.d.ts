@@ -14310,4 +14310,26 @@ declare namespace ExcelScript {
     //
 
     type RangeValue = string | number | boolean | null | undefined;
+
+    // This would be places on whatever type selectedCell is. Is it a Range?
+    interface RangeOffset {
+   /**    * I don't know what we use in excel for horizontal offset, is it 'c'?    */    
+   x: number;
+   /**    * Vertical Offset    */    y: number;
+    /**     * I don't know what this means but it corresponds to the toAbsolute thing     */    absolute: boolean;
+    // Could also store resize info or whatever other transformations need to happen
+}
+/**  * @param offserts - An array of offset objects with any properties needed to generate the range area from. Partial allows only the properties need to generate the offset to be specified. x, y default to 0 and absolute defaults to false.  */
+ function getOffsetRangeAreas(offsets: Partial<RangeOffset>[]): void
+// Takes an array of offset objects with any properties needed to generate the range area from. Partial allows only the properties need to generate the offset to be specified.
+ function getOffsetRangeAreas2(offsets: Partial<{x: number, y: number, absolute: boolean}>[]): void
+ function getOffsetRangeAreas3(offsets: {x?: number, y?: number, absolute?: boolean}[]): void
+
+interface RangeOffset4 {
+   /**    * I don't know what we use in excel for horizontal offset, is it 'c'?    */    x?: number;
+   /**    * Vertical Offset    */    y?: number;
+    /**     * I don't know what this means but it corresponds to the toAbsolute thing     */    absolute?: boolean;
+    // Could also store resize info or whatever other transformations need to happen
+}
+ function getOffsetRangeAreas4(offsets: RangeOffset4[]): void
 }

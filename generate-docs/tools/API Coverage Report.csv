@@ -2539,6 +2539,14 @@ ExcelScript.RangeHyperlink,address,Property,Poor,false
 ExcelScript.RangeHyperlink,documentReference,Property,Poor,false
 ExcelScript.RangeHyperlink,screenTip,Property,Poor,false
 ExcelScript.RangeHyperlink,textToDisplay,Property,Fine,false
+ExcelScript.RangeOffset,N/A,Class,Missing,false
+ExcelScript.RangeOffset,absolute,Property,Fine,false
+ExcelScript.RangeOffset,x,Property,Fine,false
+ExcelScript.RangeOffset,y,Property,Poor,false
+ExcelScript.RangeOffset4,N/A,Class,Missing,false
+ExcelScript.RangeOffset4,absolute,Property,Fine,false
+ExcelScript.RangeOffset4,x,Property,Fine,false
+ExcelScript.RangeOffset4,y,Property,Poor,false
 ExcelScript.RangeSort,N/A,Class,Poor,false
 ExcelScript.RangeSort,apply(fields,Method,Poor,false
 ExcelScript.RangeUnderlineStyle,N/A,Enum,Missing,false
