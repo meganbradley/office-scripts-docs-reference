@@ -25,7 +25,7 @@ npm install
 npm run build
 node preprocessor.js
 popd
-
+read -p "Press enter to continue"
 pushd api-extractor-inputs-excel
 ../node_modules/.bin/api-extractor run
 popd
