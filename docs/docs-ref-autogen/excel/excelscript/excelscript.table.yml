@@ -178,7 +178,25 @@ methods:
       content: 'clearFilters(): void;'
       return:
         type: void
-        description: ''
+        description: |-
+
+
+          #### Examples
+
+          ```TypeScript
+          /**
+           * This script clears the filters from all tables in the workbook.
+           */
+          function main(workbook: ExcelScript.Workbook) {
+              // Get all the tables in the workbook.
+              const tables = workbook.getTables();
+
+              // Remove any active filters from each table.
+              tables.forEach((table) => {
+                table.clearFilters();
+              });
+          }
+          ```
   - name: convertToRange()
     uid: 'ExcelScript!ExcelScript.Table#convertToRange:member(1)'
     package: ExcelScript!
@@ -856,7 +874,25 @@ methods:
           type: boolean
       return:
         type: void
-        description: ''
+        description: |-
+
+
+          #### Examples
+
+          ```TypeScript
+          /**
+           * This script sets all the tables in the workbook to have banded rows. 
+           */
+          function main(workbook: ExcelScript.Workbook) {
+            // Get all the tables.
+            const tables = workbook.getTables();
+
+            // For each table, set the banded row formatting to true.
+            tables.forEach((table) => {
+              table.setShowBandedRows(true);
+            });
+          }
+          ```
   - name: setShowFilterButton(showFilterButton)
     uid: 'ExcelScript!ExcelScript.Table#setShowFilterButton:member(1)'
     package: ExcelScript!

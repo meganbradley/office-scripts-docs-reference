@@ -11,6 +11,28 @@
       const dataHierarchy = pivotTable.getDataHierarchies()[0];
       dataHierarchy.setSummarizeBy(ExcelScript.AggregationFunction.average);
     }
+'ExcelScript.AllowEditRangeOptions:interface':
+  - |-
+    /**
+     * This script adds a password-protected, editable range
+     * to an otherwise protected worksheet.
+     */
+    function main(workbook: ExcelScript.Workbook, password: string) {
+        // Get the protection object for the "Data" worksheet.
+        const dataSheet = workbook.getWorksheet("Data");
+        const sheetProtection = dataSheet.getProtection();
+
+        // Set the password needed to edit the range to be the user provided string.
+        const editRangeProperties : ExcelScript.AllowEditRangeOptions = {
+            password: password
+        };
+
+        // Set range "D2:D6" to be editable if the password is provided.
+        sheetProtection.addAllowEditRange("Notes Section", "D2:D6", editRangeProperties);
+        
+        // Protect the worksheet.
+        sheetProtection.protect();
+    }
 'ExcelScript.Application#calculate:member(1)':
   - |-
     /**
@@ -130,7 +152,7 @@
   - |-
     /**
      * This script uses the autofill feature to complete a table with days of the month.
-     * See https://support.microsoft.com/74e31bdd-d993-45da-aa82-35a236c5b5db
+     * See https://support.microsoft.com/office/74e31bdd-d993-45da-aa82-35a236c5b5db
      * for examples of autofill scenarios.
      */
     function main(workbook: ExcelScript.Workbook) {
@@ -1228,6 +1250,27 @@
       };
       presetFormat.setRule(duplicateRule);
     }
+'ExcelScript.ConditionalFormatRule:interface':
+  - |-
+    /**
+     * This script applies a custom conditional formatting to the selected range.
+     * A light-green fill is applied to a cell if the value is larger than the value in the row's previous column.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the selected cells.
+      let selectedRange = workbook.getSelectedRange();
+
+      // Apply a rule for positive change from the previous column.
+      let positiveChange: ExcelScript.ConditionalFormat = selectedRange.addConditionalFormat(ExcelScript.ConditionalFormatType.custom);
+
+      // Set the conditional format to be a lightgreen fill.
+      let positiveCustom: ExcelScript.CustomConditionalFormat = positiveChange.getCustom();
+      positiveCustom.getFormat().getFill().setColor("lightgreen");
+
+      // Set the conditional rule to be if there is positive change across the row.
+      let positiveRule: ExcelScript.ConditionalFormatRule = positiveCustom.getRule();
+      positiveRule.setFormula(`=${selectedRange.getCell(0, 0).getAddress()}>${selectedRange.getOffsetRange(0, -1).getCell(0, 0).getAddress()}`);
+    }
 'ExcelScript.ConditionalFormatRuleType:enum':
   - |-
     /**
@@ -1618,19 +1661,43 @@
       let selectedRange = workbook.getSelectedRange();
 
       // Apply a rule for positive change from the previous column.
-      let positiveChange = selectedRange.addConditionalFormat(ExcelScript.ConditionalFormatType.custom);
-      positiveChange.getCustom().getFormat().getFill().setColor("lightgreen");
-      positiveChange.getCustom().getRule().setFormula(`=${selectedRange.getCell(0, 0).getAddress()}>${selectedRange.getOffsetRange(0, -1).getCell(0, 0).getAddress()}`);
+      let positiveChange: ExcelScript.ConditionalFormat = selectedRange.addConditionalFormat(ExcelScript.ConditionalFormatType.custom);
+      let positiveCustom: ExcelScript.CustomConditionalFormat = positiveChange.getCustom();
+      positiveCustom.getFormat().getFill().setColor("lightgreen");
+      positiveCustom.getRule().setFormula(`=${selectedRange.getCell(0, 0).getAddress()}>${selectedRange.getOffsetRange(0, -1).getCell(0, 0).getAddress()}`);
 
       // Apply a rule for negative change from the previous column.
-      let negativeChange = selectedRange.addConditionalFormat(ExcelScript.ConditionalFormatType.custom);
-      negativeChange.getCustom().getFormat().getFill().setColor("pink");
-      negativeChange.getCustom().getRule().setFormula(`=${selectedRange.getCell(0, 0).getAddress()}<${selectedRange.getOffsetRange(0, -1).getCell(0, 0).getAddress()}`);
+      let negativeChange: ExcelScript.ConditionalFormat = selectedRange.addConditionalFormat(ExcelScript.ConditionalFormatType.custom);
+      let negativeCustom: ExcelScript.CustomConditionalFormat = negativeChange.getCustom();
+      negativeCustom.getFormat().getFill().setColor("pink");
+      negativeCustom.getRule().setFormula(`=${selectedRange.getCell(0, 0).getAddress()}<${selectedRange.getOffsetRange(0, -1).getCell(0, 0).getAddress()}`);
 
       // Apply a rule for no change from the previous column.
-      let noChange = selectedRange.addConditionalFormat(ExcelScript.ConditionalFormatType.custom);
-      noChange.getCustom().getFormat().getFill().setColor("lightyellow");
-      noChange.getCustom().getRule().setFormula(`=${selectedRange.getCell(0, 0).getAddress()}=${selectedRange.getOffsetRange(0, -1).getCell(0, 0).getAddress()}`);
+      let sameChange: ExcelScript.ConditionalFormat = selectedRange.addConditionalFormat(ExcelScript.ConditionalFormatType.custom);
+      let sameCustom: ExcelScript.CustomConditionalFormat = sameChange.getCustom();
+      sameCustom.getFormat().getFill().setColor("lightyellow");
+      sameCustom.getRule().setFormula(`=${selectedRange.getCell(0, 0).getAddress()}=${selectedRange.getOffsetRange(0, -1).getCell(0, 0).getAddress()}`);
+    }
+'ExcelScript.CustomDataValidation:interface':
+  - |-
+    /**
+     * This script adds data validation to a range.
+     * The validation prevents duplicate entries within that range.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the range "B2:B20".
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getRange("B2:B20");
+
+      // Set data validation on the range to prevent duplicate, non-blank entries.
+      const dataValidation = range.getDataValidation();
+      dataValidation.setIgnoreBlanks(true);
+      const duplicateRule : ExcelScript.CustomDataValidation = { 
+        formula: "=COUNTIF($B$2:$B$20, B2)=1"
+      };
+      dataValidation.setRule({
+        custom: duplicateRule
+      });
     }
 'ExcelScript.DataBarConditionalFormat:interface':
   - |-
@@ -1897,6 +1964,27 @@
         }
         dataValidation.setPrompt(prompt);
     }    
+'ExcelScript.DataValidationRule#custom:member':
+  - |-
+    /**
+     * This script adds data validation to a range.
+     * The validation prevents duplicate entries within that range.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the range "B2:B20".
+      const sheet = workbook.getActiveWorksheet();
+      const range = sheet.getRange("B2:B20");
+
+      // Set data validation on the range to prevent duplicate, non-blank entries.
+      const dataValidation = range.getDataValidation();
+      dataValidation.setIgnoreBlanks(true);
+      const duplicateRule : ExcelScript.CustomDataValidation = { 
+        formula: "=COUNTIF($B$2:$B$20, B2)=1"
+      };
+      dataValidation.setRule({
+        custom: duplicateRule
+      });
+    }
 'ExcelScript.DataValidationRule#list:member':
   - |-
     /**
@@ -2335,19 +2423,6 @@
       };
       currentSheet.getAutoFilter().apply(dataRange, 2, filterCriteria);
     }
-'ExcelScript.FilterCriteria#criterion2:member':
-  - |-
-    /**
-     * This script applies a filter to a table so that it only shows rows with "Needs Review" in the "Type" column.
-     */
-    function main(workbook: ExcelScript.Workbook) {
-      // Get the first table in the workbook.
-      const table = workbook.getTables()[0];
-
-      // Apply the filter to the "Type" column.
-      const typeColumn = table.getColumnByName("Type");
-      typeColumn.getFilter().applyValuesFilter(["Needs Review"]);
-    }
 'ExcelScript.FilterDatetime:interface':
   - |-
     /**
@@ -2698,6 +2773,22 @@
       // Apply the label filter to the field.
       field.applyFilter({ labelFilter: filter });
     }
+'ExcelScript.LinkedWorkbook#breakLinks:member(1)':
+  - |-
+    /**
+     * This script removes all links to other workbooks.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get all the linked workbook references.
+        const externalWorkbooks: ExcelScript.LinkedWorkbook[] = workbook.getLinkedWorkbooks();
+        console.log(`There are ${externalWorkbooks.length} other workbooks linked to from this workbook.`);
+
+        // Remove all the links to those workbooks.
+        // This changes the value of cells with workbook links to "#CONNECT!".
+        externalWorkbooks.forEach((workbookLink) => {
+            workbookLink.breakLinks();
+        });
+    }
 'ExcelScript.ListDataValidation:interface':
   - |-
     /**
@@ -2910,6 +3001,38 @@
         // Set the print order to over-then-down.
         layout.setPrintOrder(ExcelScript.PrintOrder.overThenDown);
       });
+    }
+'ExcelScript.PageLayout#setZoom:member(1)':
+  - |-
+    /**
+     * This script changes the scale-to-fit of the page layout.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get the current worksheet.
+        const sheet = workbook.getActiveWorksheet();
+
+        // Scale the layout to half size for printing.
+        const layout = sheet.getPageLayout();
+        const zoomOptions: ExcelScript.PageLayoutZoomOptions = {
+            scale: 50
+        }
+        layout.setZoom(zoomOptions)
+    }
+'ExcelScript.PageLayoutZoomOptions:interface':
+  - |-
+    /**
+     * This script changes the scale-to-fit of the page layout.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get the current worksheet.
+        const sheet = workbook.getActiveWorksheet();
+
+        // Scale the layout to half size for printing.
+        const layout = sheet.getPageLayout();
+        const zoomOptions: ExcelScript.PageLayoutZoomOptions = {
+            scale: 50
+        }
+        layout.setZoom(zoomOptions)
     }
 'ExcelScript.PageOrientation:enum':
   - |-
@@ -3650,7 +3773,7 @@
   - |-
     /**
      * This script uses the autofill feature to complete a table.
-     * See https://support.microsoft.com/74e31bdd-d993-45da-aa82-35a236c5b5db
+     * See https://support.microsoft.com/office/74e31bdd-d993-45da-aa82-35a236c5b5db
      * for examples of autofill scenarios.
      */
     function main(workbook: ExcelScript.Workbook) {
@@ -4240,6 +4363,21 @@
       // Merge cells A1 through A4.
       const range = selectedSheet.getRange("A1:A4");
       range.merge();
+    }
+'ExcelScript.Range#removeDuplicates:member(1)':
+  - |-
+    /**
+     * This script removes duplicate rows from a range.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the used range of the active worksheet.
+      const usedRange = workbook.getActiveWorksheet().getUsedRange();
+
+      // Remove any row that has a same value in the 0-indexed column as a previous row.
+      const removedResults = usedRange.removeDuplicates([0], true);
+
+      // Log the count of removed rows.
+      console.log(`Rows removed: ${removedResults.getRemoved()}.`);
     }
 'ExcelScript.Range#replaceAll:member(1)':
   - |-
@@ -5006,6 +5144,21 @@
       const otherRangeCorner = otherSheet.getRange("A1");
       otherRangeCorner.copyFrom(source, ExcelScript.RangeCopyType.all);
     }
+'ExcelScript.RemoveDuplicatesResult:interface':
+  - |-
+    /**
+     * This script removes duplicate rows from a range.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the used range of the active worksheet.
+      const usedRange = workbook.getActiveWorksheet().getUsedRange();
+
+      // Remove any row that has a same value in the 0-indexed column as a previous row.
+      const removedResults: ExcelScript.RemoveDuplicatesResult = usedRange.removeDuplicates([0], true);
+
+      // Log the count of removed rows.
+      console.log(`Rows removed: ${removedResults.getRemoved()}.`);
+    }
 'ExcelScript.ReplaceCriteria#completeMatch:member':
   - |-
     /**
@@ -5639,6 +5792,20 @@
         // Add the rows to the end of the table.
         table.addRows(-1, rowData);
     }
+'ExcelScript.Table#clearFilters:member(1)':
+  - |-
+    /**
+     * This script clears the filters from all tables in the workbook.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get all the tables in the workbook.
+        const tables = workbook.getTables();
+
+        // Remove any active filters from each table.
+        tables.forEach((table) => {
+          table.clearFilters();
+        });
+    }
 'ExcelScript.Table#convertToRange:member(1)':
   - |-
     /**
@@ -5772,6 +5939,20 @@
         table.reapplyFilters();
       });
     }
+'ExcelScript.Table#setShowBandedRows:member(1)':
+  - |-
+    /**
+     * This script sets all the tables in the workbook to have banded rows. 
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get all the tables.
+      const tables = workbook.getTables();
+
+      // For each table, set the banded row formatting to true.
+      tables.forEach((table) => {
+        table.setShowBandedRows(true);
+      });
+    }
 'ExcelScript.Table#setShowHeaders:member(1)':
   - |-
     /**
@@ -5866,6 +6047,35 @@
         `=[@[${productColumnName1}]]*[@[${productColumnName2}]]`
       );
     }
+'ExcelScript.TableColumn#getTotalRowRange:member(1)':
+  - |-
+    /**
+     * This script logs the value in the total row of a table column.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get the table named "Cities".
+        const table = workbook.getTable("Cities");
+
+        // Get the total row from the "Population" column.
+        const column = table.getColumn("Population");
+        const totalRange = column.getTotalRowRange();
+
+        // Log the total value.
+        console.log(totalRange.getValue());
+    }
+'ExcelScript.TableColumn#setName:member(1)':
+  - |-
+    /**
+     * This script renames a column in an existing table.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the "Employee" table.
+      const employeeTable = workbook.getTable("Employee");
+
+      // Rename a column from "EmplID" to "Employee ID".
+      const idColumn = employeeTable.getColumnByName("EmplID");
+      idColumn.setName("Employee ID");
+    }
 'ExcelScript.TableSort#apply:member(1)':
   - |-
     /**
@@ -5881,6 +6091,21 @@
 
       // Sort the table using the first column.
       newTable.getSort().apply([{ key: 0, ascending: true }]);
+    }
+'ExcelScript.TableSort#reapply:member(1)':
+  - |-
+    /**
+     * This script reapplies all the current sorting criteria to existing tables.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get all the tables.
+      const tables = workbook.getTables();
+
+      // For each table, reapply that table's current sorting parameters.
+      tables.forEach((table) => {
+        const sort: ExcelScript.TableSort = table.getSort();
+        sort.reapply();
+      });
     }
 'ExcelScript.TextConditionalFormat:interface':
   - |-
@@ -6164,7 +6389,7 @@
     /**
      * This script refreshes all the links to external workbooks, 
      * if the linked workbook refresh mode is set to manual.
-     * To learn about linked workbooks, see https://support.microsoft.com/office/create-an-external-reference-link-to-a-cell-range-in-another-workbook-c98d1803-dd75-4668-ac6a-d7cca2a9b95f.
+     * To learn about linked workbooks, see https://support.microsoft.com/office/c98d1803-dd75-4668-ac6a-d7cca2a9b95f.
      */
     function main(workbook: ExcelScript.Workbook) {
       // Check the refresh mode.
@@ -6174,6 +6399,21 @@
         // Trigger a refresh of linked workbook content.
         workbook.refreshAllLinksToLinkedWorkbooks();
       }
+'ExcelScript.Workbook#getLinkedWorkbooks:member(1)':
+  - |-
+    /**
+     * This script removes all links to other workbooks.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+        // Get all the linked workbook references.
+        const externalWorkbooks: ExcelScript.LinkedWorkbook[] = workbook.getLinkedWorkbooks();
+        console.log(`There are ${externalWorkbooks.length} other workbooks linked to from this workbook.`);
+
+        // Remove all the links to those workbooks.
+        // This changes the value of cells with workbook links to "#CONNECT!".
+        externalWorkbooks.forEach((workbookLink) => {
+            workbookLink.breakLinks();
+        });
     }
 'ExcelScript.Workbook#getName:member(1)':
   - |-
@@ -6324,7 +6564,7 @@
     /**
      * This script refreshes all the links to external workbooks, 
      * if the linked workbook refresh mode is set to manual.
-     * To learn about linked workbooks, see https://support.microsoft.com/office/create-an-external-reference-link-to-a-cell-range-in-another-workbook-c98d1803-dd75-4668-ac6a-d7cca2a9b95f.
+     * To learn about linked workbooks, see https://support.microsoft.com/office/c98d1803-dd75-4668-ac6a-d7cca2a9b95f.
      */
     function main(workbook: ExcelScript.Workbook) {
       // Check the refresh mode.
@@ -6532,7 +6772,7 @@
  - |-
     /**
      * This script searches through a worksheet and finds cells containing "No". 
-     * Those cells are filled red.
+     * Those cells are filled with the color red.
      * Use Range.find instead of Worksheet.findAll when you want to limit the search to a specific range.
      */
     function main(workbook: ExcelScript.Workbook) {
@@ -6733,6 +6973,28 @@
         console.log("Incorrect password");
       }
     }
+'ExcelScript.WorksheetProtection#addAllowEditRange:member(1)':
+  - |-
+    /**
+     * This script adds a password-protected, editable range
+     * to an otherwise protected worksheet.
+     */
+    function main(workbook: ExcelScript.Workbook, password: string) {
+        // Get the protection object for the "Data" worksheet.
+        const dataSheet = workbook.getWorksheet("Data");
+        const sheetProtection = dataSheet.getProtection();
+
+        // Set the password needed to edit the range to be the user provided string.
+        const editRangeProperties : ExcelScript.AllowEditRangeOptions = {
+            password: password
+        };
+
+        // Set range "D2:D6" to be editable if the password is provided.
+        sheetProtection.addAllowEditRange("Notes Section", "D2:D6", editRangeProperties);
+        
+        // Protect the worksheet.
+        sheetProtection.protect();
+    }
 'ExcelScript.WorksheetProtection#protect:member(1)':
   - |-
     /**
@@ -6768,4 +7030,25 @@
 
       // Apply the given protection options.
       sheetProtection.protect(protectionOptions);
+    }
+'ExcelScript.WorksheetSearchCriteria:interface':
+ - |-
+    /**
+     * This script searches through a worksheet and finds cells containing "No". 
+     * Those cells are filled with the color red.
+     * Use Range.find instead of Worksheet.findAll when you want to limit the search to a specific range.
+     */
+    function main(workbook: ExcelScript.Workbook) {
+      // Get the current, active worksheet.
+      const worksheet = workbook.getActiveWorksheet();
+
+      // Get all the cells that exactly contain the string "No".
+      const searchCriteria: ExcelScript.WorksheetSearchCriteria = { 
+        completeMatch: true,
+        matchCase: true
+      };
+      const noCells = worksheet.findAll("No", searchCriteria);
+
+      // Set the fill color to red.
+      noCells.getFormat().getFill().setColor("red");
     }

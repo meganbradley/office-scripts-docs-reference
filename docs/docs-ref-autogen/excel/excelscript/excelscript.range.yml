@@ -108,7 +108,7 @@ methods:
           ```TypeScript
           /**
            * This script uses the autofill feature to complete a table.
-           * See https://support.microsoft.com/74e31bdd-d993-45da-aa82-35a236c5b5db
+           * See https://support.microsoft.com/office/74e31bdd-d993-45da-aa82-35a236c5b5db
            * for examples of autofill scenarios.
            */
           function main(workbook: ExcelScript.Workbook) {
@@ -161,7 +161,7 @@ methods:
     uid: 'ExcelScript!ExcelScript.Range#clear:member(1)'
     package: ExcelScript!
     fullName: clear(applyTo)
-    summary: 'Clear range values, format, fill, border, etc.'
+    summary: 'Clear range values and formatting, such as fill and border.'
     remarks: ''
     isPreview: false
     isDeprecated: false
@@ -785,6 +785,36 @@ methods:
               });
           }
           ```
+  - name: getDependents()
+    uid: 'ExcelScript!ExcelScript.Range#getDependents:member(1)'
+    package: ExcelScript!
+    fullName: getDependents()
+    summary: >-
+      Returns a `WorkbookRangeAreas` object that represents the range containing all the dependent cells of a specified
+      range in the same worksheet or across multiple worksheets.
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getDependents(): WorkbookRangeAreas;'
+      return:
+        type: '<xref uid="ExcelScript!ExcelScript.WorkbookRangeAreas:interface" />'
+        description: ''
+  - name: getDirectDependents()
+    uid: 'ExcelScript!ExcelScript.Range#getDirectDependents:member(1)'
+    package: ExcelScript!
+    fullName: getDirectDependents()
+    summary: >-
+      Returns a `WorkbookRangeAreas` object that represents the range containing all the direct dependent cells of a
+      specified range in the same worksheet or across multiple worksheets.
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getDirectDependents(): WorkbookRangeAreas;'
+      return:
+        type: '<xref uid="ExcelScript!ExcelScript.WorkbookRangeAreas:interface" />'
+        description: ''
   - name: getDirectPrecedents()
     uid: 'ExcelScript!ExcelScript.Range#getDirectPrecedents:member(1)'
     package: ExcelScript!
@@ -1290,7 +1320,7 @@ methods:
     summary: >-
       Returns a `RangeAreas` object that represents the merged areas in this range. Note that if the merged areas count
       in this range is more than 512, then this method will fail to return the result. If the `RangeAreas` object
-      doesn't exist, then this method returns `undefined`<!-- -->.
+      doesn't exist, then this function returns `undefined`<!-- -->.
     remarks: ''
     isPreview: false
     isDeprecated: false
@@ -1491,6 +1521,21 @@ methods:
           type: boolean
       return:
         type: '<xref uid="ExcelScript!ExcelScript.PivotTable:interface" />[]'
+        description: ''
+  - name: getPrecedents()
+    uid: 'ExcelScript!ExcelScript.Range#getPrecedents:member(1)'
+    package: ExcelScript!
+    fullName: getPrecedents()
+    summary: >-
+      Returns a `WorkbookRangeAreas` object that represents the range containing all the precedent cells of a specified
+      range in the same worksheet or across multiple worksheets.
+    remarks: ''
+    isPreview: false
+    isDeprecated: false
+    syntax:
+      content: 'getPrecedents(): WorkbookRangeAreas;'
+      return:
+        type: '<xref uid="ExcelScript!ExcelScript.WorkbookRangeAreas:interface" />'
         description: ''
   - name: getPredefinedCellStyle()
     uid: 'ExcelScript!ExcelScript.Range#getPredefinedCellStyle:member(1)'
@@ -2304,7 +2349,26 @@ methods:
           type: boolean
       return:
         type: '<xref uid="ExcelScript!ExcelScript.RemoveDuplicatesResult:interface" />'
-        description: ''
+        description: |-
+
+
+          #### Examples
+
+          ```TypeScript
+          /**
+           * This script removes duplicate rows from a range.
+           */
+          function main(workbook: ExcelScript.Workbook) {
+            // Get the used range of the active worksheet.
+            const usedRange = workbook.getActiveWorksheet().getUsedRange();
+
+            // Remove any row that has a same value in the 0-indexed column as a previous row.
+            const removedResults = usedRange.removeDuplicates([0], true);
+
+            // Log the count of removed rows.
+            console.log(`Rows removed: ${removedResults.getRemoved()}.`);
+          }
+          ```
   - name: 'replaceAll(text, replacement, criteria)'
     uid: 'ExcelScript!ExcelScript.Range#replaceAll:member(1)'
     package: ExcelScript!
